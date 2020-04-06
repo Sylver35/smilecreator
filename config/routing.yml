@@ -1,0 +1,6 @@
+sylver35_smilecreator_controller:
+    path: /smilecreator/create
+    defaults: { _controller: sylver35.smilecreator.controller:create_smiley }
+sylver35_smilecreator_controller_display:
+    path: /smilecreate/display
+    defaults: { _controller: sylver35.smilecreator.controller:display_smiley }

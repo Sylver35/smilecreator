@@ -1,0 +1,87 @@
+{% INCLUDE 'simple_header.html' %}
+{% INCLUDECSS '@sylver35_smilecreator/common.css' %}
+<div class="panel">
+	<div class="inner">
+		<h2>{{ lang('SMILIE_CREATOR') }}</h2>
+		<form action="" id="creator" >
+			<fieldset>
+				<dl class="fields2">
+					<dt class="dt-smiley">
+						<label for="schildtext">{{ lang('SHIELDTEXT') }}:</label>
+					</dt>
+					<dd class="dd-smiley">
+						<input class="inputbox autowidth" type="text" id="schildtext" name="schildtext" size="40" maxlength="200" spellcheck="true" />
+					</dd>
+				</dl>
+				<dl class="fields2">
+					<dt class="dt-smiley">
+						<label for="color">{{ lang('FONTCOLOR') }}:</label>
+					</dt>
+					<dd class="dd-smiley">
+						<select name="color" id="color" onchange="update_select(this.id,this.options[selectedIndex].value,this.options[selectedIndex].text,true);">
+							{{ SELECT_FONTCOLOR }}
+						</select>
+					</dd>
+				</dl>
+				<dl class="fields2">
+					<dt class="dt-smiley">
+						<label for="shadowcolor">{{ lang('SHADOWCOLOR') }}:</label>
+					</dt>
+					<dd class="dd-smiley">
+						<select name="shadowcolor" id="shadowcolor" onchange="update_select(this.id,this.options[selectedIndex].value,this.options[selectedIndex].text,false);">
+							{{ SELECT_SHADOWCOLOR }}
+						</select>
+					</dd>
+				</dl>
+				<dl class="fields2">
+					<dt class="dt-smiley">
+						<label for="shieldshadow">{{ lang('SHIELDSHADOW') }}:</label>
+					</dt>
+					<dd class="dd-smiley">
+						<select name="shieldshadow" id="shieldshadow">
+							<option value="0">{{ lang('SHIELDSHADOW_OFF') }}</option>
+							<option value="1">{{ lang('SHIELDSHADOW_ON') }}</option>
+						</select>
+					</dd>
+				</dl>
+				<dl class="fields2">
+					<dt class="dt-smiley">
+						<label for="schildlist">{{ lang('SMILIECHOOSER') }}:</label>
+					</dt>
+					<dd class="dd-smiley">
+						<div id="schildlist">
+							<div class="table-smiley">
+								<div class="row-smiley">
+								{% for smiley in smileys %}
+								{% if smiley.ROWS %}
+								</div>
+								<div class="row-smiley">
+								{% endif %}
+									<span class="cell-smiley">
+										<input type="radio" class="radio" name="smilie" id="smilie{{ smiley.SELECT }}" title="{{ smiley.TITLE }}" value="{{ smiley.SELECT }}"{{ smiley.CHECKED }} /> 
+										<img src="{{ SMILEYS_SRC }}{{ smiley.SRC }}" alt="{{ smiley.TITLE }}" title="{{ smiley.TITLE }}" />
+									</span>
+								{% endfor %}
+								</div>
+							</div>
+							<div class="table-smiley">
+								<div class="row-smiley">
+									<span class="cell-random">
+										<input type="radio" class="radio" name="smilie" id="random_smilie" title="{{ lang('RANDOM_SMILIE') }}" value="{{ SMILEY_RANDOM }}" /> {{ lang('RANDOM_SMILIE') }}
+									</span>
+								</div>
+							</div>
+						</div>
+					</dd>
+				</dl>
+				<dl class="fields2 dl-bottom">
+					<dd class="dd-smiley centered">
+						<a class="button1 pointer" onclick="createSmilie();" title="{{ lang('CREATE_SMILIE') }}">{{ lang('CREATE_SMILIE') }}</a>&nbsp;&nbsp;<a class="button1 pointer" onclick="window.close();" title="{{ lang('STOP_CREATING') }}">{{ lang('STOP_CREATING') }}</a>
+					</dd>
+				</dl>
+			</fieldset>
+		</form>
+		<a class="pointer" onclick="window.close(); return false;" title="{{ lang('CLOSE_WINDOW') }}">{{ lang('CLOSE_WINDOW') }}</a>
+	</div>
+</div>
+{% INCLUDE 'simple_footer.html' %}

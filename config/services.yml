@@ -1,0 +1,21 @@
+services:
+    sylver35.smilecreator.listener:
+        class: sylver35\smilecreator\event\listener
+        arguments:
+            - '@config'
+            - '@controller.helper'
+            - '@template'
+            - '@language'
+            - '%core.php_ext%'
+        tags:
+            - { name: event.listener }
+    sylver35.smilecreator.controller:
+        class: sylver35\smilecreator\controller\controller
+        arguments:
+            - '@config'
+            - '@request'
+            - '@controller.helper'
+            - '@template'
+            - '@language'
+            - '%core.root_path%'
+            - '%core.php_ext%'

@@ -1,0 +1,48 @@
+{% if S_IN_CREATE_SMILEY %}
+<script>
+$(document).ready(function(){
+	$('#phpbb').css('padding', '0');
+	$('#wrap').css({'margin':'0 auto','padding':'0','border':'none','max-width':'100%'});
+	$('#page-body').css('margin', '0');
+	var $copy = $('.copyright').html();
+	$('.copyright').html($copy+"<br />{{ lang('SC_COPY') | escape('js') }}");
+});
+var form_name = 'postform',text_name = 'message';
+function createSmilie(){
+	var text2form = '',caract = new RegExp('[\'",;:.!ยง@&€£¥¤§$#?©®{}=~%*$\/]', 'gi');
+	if($('#chat_message', window.opener.document) !== null){
+		text_name = 'chat_message';
+	}
+	var text = $('#schildtext').val();
+	var smilie = $('input[type=radio][name=smilie]:checked').val();
+	if($('#random_smilie').is(':checked')){
+		smilie = 0;
+	}
+	if(text){
+		text = text.replace(caract, '');
+		text2form = '[creator='+smilie+','+$('#shieldshadow option:selected').val()+','+$('#color option:selected').val()+','+$('#shadowcolor option:selected').val()+']'+text+'[/creator]';
+		if(window.opener.document.getElementById('chat_message') !== null){
+			window.opener.document.getElementById('chat_message').focus();
+			window.opener.document.getElementById('chat_message').value += text2form;
+		}else{
+			window.opener.document.getElementById('message').focus();
+			window.opener.document.getElementById('message').value += text2form;
+		}
+		window.close();
+	}else{
+		alert("{{ lang('SC_ERROR') | escape('js') }}");
+	}
+}
+function update_select(id,value,text,sort){
+	var color = (value === 'FFFFFF' || value === 'FFFF00') ? 'black' : 'white';
+	if(sort){
+		$('#schildtext').css({'color':'#'+value,'background-color':color});
+		$('#'+id).attr('title',text).css({'color':'#'+value,'background-color':color});
+	}else{
+		var shadow = (value === '0') ? '' : '-1px 1px 2px #'+value;
+		$('#schildtext').css('text-shadow',shadow);
+		$('#'+id).attr('title',text);
+	}
+}
+</script>
+{% endif %}

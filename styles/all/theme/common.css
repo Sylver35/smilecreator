@@ -1,0 +1,48 @@
+div.table-smiley {
+	display: table;
+	text-align: left;
+	width: 100%;
+}
+
+div.row-smiley {
+	display: table-row;
+	padding: 0;
+	margin: 0;
+}
+
+span.cell-smiley {
+	display: table-cell;
+	width: 20%;
+	height: 28px;
+}
+
+span.cell-random {
+	display: table-cell;
+	width: 250px;
+	height: 40px;
+}
+
+span.colspan2 {
+	position: absolute;
+}
+
+dt.dt-smiley {
+	width: 29%;
+}
+
+dd.dd-smiley {
+	margin-left: 30%;
+	width: 62%;
+}
+
+dl.dl-bottom {
+	margin-top: 5px;
+}
+
+.centered {
+	text-align: center;
+}
+
+a.pointer {
+	cursor: pointer;
+}
