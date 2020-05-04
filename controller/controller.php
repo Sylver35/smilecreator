@@ -171,8 +171,8 @@ class controller
 
 		// Main work here
 		$img = @imagecreatetruecolor($width, $height);
-		$smiley = imagecreatefrompng($this->ext_path . 'images/smilie' . $smiley . '.png');
-		$schild = imagecreatefrompng($this->ext_path . 'images/schild.png');
+		$smiley = @imagecreatefrompng($this->ext_path . 'images/smilie' . $smiley . '.png');
+		$schild = @imagecreatefrompng($this->ext_path . 'images/schild.png');
 
 		$r1 = (int) hexdec(substr($fontcolor, 0, 2));
 		$g1 = (int) hexdec(substr($fontcolor, 2, 2));
@@ -200,9 +200,9 @@ class controller
 		imagesetpixel($schild, 5, 15, imagecolorallocate($schild, ($smileycolor["red"] + 52), ($smileycolor["green"] + 59), ($smileycolor["blue"] + 11)));
 		imagesetpixel($schild, 6, 15, imagecolorallocate($schild, ($smileycolor["red"] + 50), ($smileycolor["green"] + 52), ($smileycolor["blue"] + 50)));
 
-		imagecopy($img, $schild, ($width / 2 - 3), 0, 0, 0, 6, 4);
-		imagecopy($img, $schild, ($width / 2 - 3), ($height - 24), 0, 5, 9, 17);
-		imagecopy($img, $smiley, ($width / 2 + 6), ($height - 24), 0, 0, 23, 23);
+		@imagecopy($img, $schild, ($width / 2 - 3), 0, 0, 0, 6, 4);
+		@imagecopy($img, $schild, ($width / 2 - 3), ($height - 24), 0, 5, 9, 17);
+		@imagecopy($img, $smiley, ($width / 2 + 6), ($height - 24), 0, 0, 23, 23);
 
 		imagefilledrectangle($img, 0, 4, $width, ($height - 25), $bocolor);
 		imagefilledrectangle($img, 1, 5, ($width - 2), ($height - 26), $schcolor);
