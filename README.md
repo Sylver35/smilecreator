@@ -1,5 +1,9 @@
 # phpBB Breizh Smilies Creator Extension
 
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Sylver35/smilecreator/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Sylver35/smilecreator/?branch=master)
+[![Build Status](https://scrutinizer-ci.com/g/Sylver35/smilecreator/badges/build.png?b=master)](https://scrutinizer-ci.com/g/Sylver35/smilecreator/build-status/master)
+[![Code Intelligence Status](https://scrutinizer-ci.com/g/Sylver35/smilecreator/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
+
 ## Install
 
 1. Download the latest release.
