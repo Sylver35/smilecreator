@@ -13,6 +13,7 @@ use phpbb\request\request;
 use phpbb\controller\helper;
 use phpbb\template\template;
 use phpbb\language\language;
+use phpbb\exception\http_exception;
 
 class controller
 {
@@ -126,6 +127,7 @@ class controller
 		$shieldshadow = $this->request->variable('shieldshadow', 0);
 		$fontwidth = 6;
 		$fontheight = 11;
+		$this->language->add_lang('smilie_creator', 'sylver35/smilecreator');
 
 		// We have a random smilie ?
 		if ($smiley === 0)
@@ -170,7 +172,7 @@ class controller
 		$height = ($out * $fontheight) + 35;
 
 		// Main work here
-		$img = @imagecreatetruecolor($width, $height);
+		$img = @imagecreate($width, $height);
 		$smiley = @imagecreatefrompng($this->ext_path . 'images/smilie' . $smiley . '.png');
 		$schild = @imagecreatefrompng($this->ext_path . 'images/schild.png');
 
@@ -200,9 +202,18 @@ class controller
 		imagesetpixel($schild, 5, 15, imagecolorallocate($schild, ($smileycolor["red"] + 52), ($smileycolor["green"] + 59), ($smileycolor["blue"] + 11)));
 		imagesetpixel($schild, 6, 15, imagecolorallocate($schild, ($smileycolor["red"] + 50), ($smileycolor["green"] + 52), ($smileycolor["blue"] + 50)));
 
-		@imagecopy($img, $schild, ($width / 2 - 3), 0, 0, 0, 6, 4);
-		@imagecopy($img, $schild, ($width / 2 - 3), ($height - 24), 0, 5, 9, 17);
-		@imagecopy($img, $smiley, ($width / 2 + 6), ($height - 24), 0, 0, 23, 23);
+		if (@imagecopy($img, $schild, ($width / 2 - 3), 0, 0, 0, 6, 4) === false)
+		{
+			throw new http_exception(400, 'CREATE_ERROR');
+		}
+		if (@imagecopy($img, $schild, ($width / 2 - 3), ($height - 24), 0, 5, 9, 17) === false)
+		{
+			throw new http_exception(400, 'CREATE_ERROR');
+		}
+		if (@imagecopy($img, $smiley, ($width / 2 + 6), ($height - 24), 0, 0, 23, 23) === false)
+		{
+			throw new http_exception(400, 'CREATE_ERROR');
+		}
 
 		imagefilledrectangle($img, 0, 4, $width, ($height - 25), $bocolor);
 		imagefilledrectangle($img, 1, 5, ($width - 2), ($height - 26), $schcolor);

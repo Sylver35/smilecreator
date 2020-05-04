@@ -66,6 +66,7 @@ $lang = array_merge($lang, array(
 	'DEFAULT_SMILIE'		=> 'Smiley par défaut',
 	'CREATE_SMILIE'			=> 'Créer',
 	'STOP_CREATING'			=> 'Annuler',
+	'CREATE_ERROR'			=> 'Impossible de créer l’image',
 	'SC_ERROR'				=> 'ici se trouve votre pancarte… Vous avez oublié le texte…',
 	'SC_COPY'				=> 'Breizh Smilie Creator By Sylver35',
 ));

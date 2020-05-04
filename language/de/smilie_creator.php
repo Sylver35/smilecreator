@@ -66,6 +66,7 @@ $lang = array_merge($lang, array(
 	'DEFAULT_SMILIE'		=> 'Standard-Smilie',
 	'CREATE_SMILIE'			=> 'Erstellen',
 	'STOP_CREATING'			=> 'Abbrechen',
+	'CREATE_ERROR'			=> 'Bild kann nicht erstellt werden',
 	'SC_ERROR'				=> 'Hier ist dein Schild… du hast den Text vergessen…',
 	'SC_COPY'				=> 'Breizh Smilie Creator By Sylver35',
 ));
