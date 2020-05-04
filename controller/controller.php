@@ -8,7 +8,6 @@
  */
 
 namespace sylver35\smilecreator\controller;
-
 use phpbb\config\config;
 use phpbb\request\request;
 use phpbb\controller\helper;
@@ -49,15 +48,15 @@ class controller
 	 */
 	public function __construct(config $config, request $request, helper $helper, template $template, language $language, $root_path, $php_ext)
 	{
-		$this->config			= $config;
-		$this->request			= $request;
-		$this->helper			= $helper;
-		$this->template			= $template;
-		$this->language			= $language;
-		$this->root_path		= $root_path;
-		$this->php_ext			= $php_ext;
-		$this->ext_path			= $root_path . 'ext/sylver35/smilecreator/';
-		$this->ext_path_web		= generate_board_url() . '/ext/sylver35/smilecreator/';
+		$this->config = $config;
+		$this->request = $request;
+		$this->helper = $helper;
+		$this->template = $template;
+		$this->language = $language;
+		$this->root_path = $root_path;
+		$this->php_ext = $php_ext;
+		$this->ext_path = $root_path . 'ext/sylver35/smilecreator/';
+		$this->ext_path_web = generate_board_url() . '/ext/sylver35/smilecreator/';
 	}
 
 	public function create_smiley()
@@ -102,7 +101,7 @@ class controller
 				$j++;
 			}
 		}
-		if ($this->config['smiliecreator_count'] !== $i)
+		if ((int) $this->config['smiliecreator_count'] !== $i)
 		{
 			$this->config->set('smiliecreator_count', $i);
 		}
@@ -120,18 +119,18 @@ class controller
 
 	public function display_smiley()
 	{
-		$text			= $this->request->variable('text', '', true);
-		$smiley			= $this->request->variable('smiley', 0);
-		$fontcolor		= $this->request->variable('fontcolor', '');
-		$shadowcolor	= $this->request->variable('shadowcolor', '');
-		$shieldshadow	= $this->request->variable('shieldshadow', 0);
-		$fontwidth		= 6;
-		$fontheight		= 11;
+		$text = $this->request->variable('text', '', true);
+		$smiley = $this->request->variable('smiley', 0);
+		$fontcolor = $this->request->variable('fontcolor', '');
+		$shadowcolor = $this->request->variable('shadowcolor', '');
+		$shieldshadow = $this->request->variable('shieldshadow', 0);
+		$fontwidth = 6;
+		$fontheight = 11;
 
 		// We have a random smilie ?
 		if ($smiley === 0)
 		{
-			$smiley = mt_rand(1, $this->config['smiliecreator_count'] - 1);
+			$smiley = mt_rand(1, (int) $this->config['smiliecreator_count'] - 1);
 		}
 
 		// Clean the text before
@@ -145,7 +144,7 @@ class controller
 			if ($nb > 120)
 			{
 				$output[1] = substr($text, 40, 40);
-				$output[2] = substr($text, 80, 37) . '…';
+				$output[2] = substr($text, 80, 37) . '...';
 			}
 			else if ($nb > 80)
 			{
@@ -165,24 +164,30 @@ class controller
 		}
 
 		// Maybe we have to tweak here a bit. Depends on the font...
-		$width = ($char_count * $fontwidth) + 14;
-		$width = ($width < 60) ? 60 : $width;// min width is 60 pixels
-		$height = (sizeof($output) * $fontheight) + 35;
+		$in = ($char_count * $fontwidth) + 14;
+		$width = ($in < 60) ? 60 : $in;
+		$out = sizeof($output);
+		$height = ($out * $fontheight) + 35;
 
 		// Main work here
-		$smiley			= imagecreatefrompng($this->ext_path . 'images/smilie' . $smiley . '.png');
-		$schild			= imagecreatefrompng($this->ext_path . 'images/schild.png');
-		$img			= imagecreate($width, $height);
+		$img = @imagecreatetruecolor($width, $height);
+		$smiley = imagecreatefrompng($this->ext_path . 'images/smilie' . $smiley . '.png');
+		$schild = imagecreatefrompng($this->ext_path . 'images/schild.png');
 
-		$bgcolor		= imagecolorallocate($img, 111, 252, 134);
-		$txtcolor		= imagecolorallocate($img, hexdec(substr($fontcolor, 0, 2)), hexdec(substr($fontcolor, 2, 2)), hexdec(substr($fontcolor, 4, 2)));
-		$txt2color		= imagecolorallocate($img, hexdec(substr($shadowcolor, 0, 2)), hexdec(substr($shadowcolor, 2, 2)), hexdec(substr($shadowcolor, 4, 2)));
-		$bocolor		= imagecolorallocate($img, 0, 0, 0);
-		$schcolor		= imagecolorallocate($img, 255, 255, 255);
-		$shadow1color	= imagecolorallocate($img, 235, 235, 235);
-		$shadow2color	= imagecolorallocate($img, 219, 219, 219);
-
-		$smileycolor 	= imagecolorsforindex($smiley, imagecolorat($smiley, 5, 14));
+		$r1 = (int) hexdec(substr($fontcolor, 0, 2));
+		$g1 = (int) hexdec(substr($fontcolor, 2, 2));
+		$b1 = (int) hexdec(substr($fontcolor, 4, 2));
+		$r2 = (int) hexdec(substr($shadowcolor, 0, 2));
+		$g2 = (int) hexdec(substr($shadowcolor, 2, 2));
+		$b2 = (int) hexdec(substr($shadowcolor, 4, 2));
+		$bgcolor = imagecolorallocate($img, 111, 252, 134);
+		$txtcolor = imagecolorallocate($img, $r1, $g1, $b1);
+		$txt2color = imagecolorallocate($img, $r2, $g2, $b2);
+		$bocolor = imagecolorallocate($img, 0, 0, 0);
+		$schcolor = imagecolorallocate($img, 255, 255, 255);
+		$shadow1color = imagecolorallocate($img, 235, 235, 235);
+		$shadow2color = imagecolorallocate($img, 219, 219, 219);
+		$smileycolor = imagecolorsforindex($smiley, imagecolorat($smiley, 5, 14));
 
 		imagesetpixel($schild, 1, 14, imagecolorallocate($schild, ($smileycolor["red"] + 52), ($smileycolor["green"] + 59), ($smileycolor["blue"] + 11)));
 		imagesetpixel($schild, 2, 14, imagecolorallocate($schild, ($smileycolor["red"] + 50), ($smileycolor["green"] + 52), ($smileycolor["blue"] + 50)));
@@ -195,9 +200,9 @@ class controller
 		imagesetpixel($schild, 5, 15, imagecolorallocate($schild, ($smileycolor["red"] + 52), ($smileycolor["green"] + 59), ($smileycolor["blue"] + 11)));
 		imagesetpixel($schild, 6, 15, imagecolorallocate($schild, ($smileycolor["red"] + 50), ($smileycolor["green"] + 52), ($smileycolor["blue"] + 50)));
 
-		imagecopy($img, $schild, ($width / 2 - 3), 0, 0, 0, 6, 4);// Copy image tile
-		imagecopy($img, $schild, ($width / 2 - 3), ($height - 24), 0, 5, 9, 17);// Copy image tile
-		imagecopy($img, $smiley, ($width / 2 + 6), ($height - 24), 0, 0, 23, 23);// Copy image tile
+		imagecopy($img, $schild, ($width / 2 - 3), 0, 0, 0, 6, 4);
+		imagecopy($img, $schild, ($width / 2 - 3), ($height - 24), 0, 5, 9, 17);
+		imagecopy($img, $smiley, ($width / 2 + 6), ($height - 24), 0, 0, 23, 23);
 
 		imagefilledrectangle($img, 0, 4, $width, ($height - 25), $bocolor);
 		imagefilledrectangle($img, 1, 5, ($width - 2), ($height - 26), $schcolor);
