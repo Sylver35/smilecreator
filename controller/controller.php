@@ -173,8 +173,20 @@ class controller
 
 		// Main work here
 		$img = @imagecreate($width, $height);
+		if ($img === false)
+		{
+			throw new http_exception(400, 'CREATE_ERROR');
+		}
 		$smiley = @imagecreatefrompng($this->ext_path . 'images/smilie' . $smiley . '.png');
+		if ($smiley === false)
+		{
+			throw new http_exception(400, 'CREATE_ERROR');
+		}
 		$schild = @imagecreatefrompng($this->ext_path . 'images/schild.png');
+		if ($schild === false)
+		{
+			throw new http_exception(400, 'CREATE_ERROR');
+		}
 
 		$r1 = (int) hexdec(substr($fontcolor, 0, 2));
 		$g1 = (int) hexdec(substr($fontcolor, 2, 2));
