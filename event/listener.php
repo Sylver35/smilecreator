@@ -8,7 +8,6 @@
  */
 
 namespace sylver35\smilecreator\event;
-
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use phpbb\config\config;
 use phpbb\controller\helper;
@@ -37,11 +36,11 @@ class listener implements EventSubscriberInterface
 	 */
 	public function __construct(config $config, helper $helper, template $template, language $language, $php_ext)
 	{
-		$this->config		= $config;
-		$this->helper		= $helper;
-		$this->template		= $template;
-		$this->language		= $language;
-		$this->php_ext		= $php_ext;
+		$this->config = $config;
+		$this->helper = $helper;
+		$this->template = $template;
+		$this->language = $language;
+		$this->php_ext = $php_ext;
 	}
 
 	/**
