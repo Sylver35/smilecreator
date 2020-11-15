@@ -13,17 +13,17 @@ class release_1_0_0_add_bbcode extends \phpbb\db\migration\migration
 {
 	public function update_data()
 	{
-		return array(
+		return [
 			// custom function
-			array('custom', array(array(&$this, 'install_bbcode'))),
-		);
+			['custom', [[&$this, 'install_bbcode']]],
+		];
 	}
 
 	public function revert_data()
 	{
-		return array(
-			array('custom', array(array(&$this, 'remove_bbcode'))),
-		);
+		return [
+			['custom', [[&$this, 'remove_bbcode']]],
+		];
 	}
 
 	public function install_bbcode()
@@ -57,7 +57,7 @@ class release_1_0_0_add_bbcode extends \phpbb\db\migration\migration
 
 			if ($bbcode_id <= BBCODE_LIMIT)
 			{
-				$sql_data = array(
+				$sql_data = [
 					'bbcode_tag'			=> 'creator',
 					'bbcode_id'				=> (int) $bbcode_id,
 					'bbcode_helpline'		=> '',
@@ -65,10 +65,10 @@ class release_1_0_0_add_bbcode extends \phpbb\db\migration\migration
 					'bbcode_match'			=> '[creator={SIMPLETEXT1},{NUMBER},{SIMPLETEXT2},{SIMPLETEXT3}]{TEXT}[/creator]',
 					'bbcode_tpl'			=> '<img src="|S_CREATOR_BBCODE|app.php/smilecreate/display?smiley={SIMPLETEXT1}&shieldshadow={NUMBER}&fontcolor={SIMPLETEXT2}&shadowcolor={SIMPLETEXT3}&text={TEXT}" alt="{L_IMAGE}" title="{TEXT}" />',
 					'first_pass_match'		=> '!\[creator\=([a-zA-Z0-9-+.,_ ]+),([0-9]+),([a-zA-Z0-9-+.,_ ]+),([a-zA-Z0-9-+.,_ ]+)\](.*?)\[/creator\]!iu',
-					'first_pass_replace'	=> '\'[creator=${1},${2},${3},${4}:$uid]\' . str_replace(array("  ", \'"\', "\'", "&amp;", "&", "$", "!", ",", ";"), array(" ", "", "", "", "", "", "", "", ""), ${5}) . \'[/creator:$uid]\'',
+					'first_pass_replace'	=> '\'[creator=${1},${2},${3},${4}:$uid]\' . str_replace(["  ", \'"\', "\'", "&amp;", "&", "$", "!", ",", ";"], [" ", "", "", "", "", "", "", "", ""], ${5}) . \'[/creator:$uid]\'',
 					'second_pass_match'		=> '!\[creator\=([a-zA-Z0-9-+.,_ ]+),([0-9]+),([a-zA-Z0-9-+.,_ ]+),([a-zA-Z0-9-+.,_ ]+):$uid\](.*?)\[/creator:$uid\]!su',
 					'second_pass_replace'	=> '<img src="|S_CREATOR_BBCODE|app.php/smilecreate/display?smiley=${1}&shieldshadow=${2}&fontcolor=${3}&shadowcolor=${4}&text=${5}" alt="{L_IMAGE}" title="${5}" />',
-				);
+				];
 				$sql = 'INSERT INTO ' . $this->table_prefix . 'bbcodes ' . $this->db->sql_build_array('INSERT', $sql_data);
 				$this->db->sql_query($sql);
 			}

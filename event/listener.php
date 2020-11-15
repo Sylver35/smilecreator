@@ -8,6 +8,7 @@
  */
 
 namespace sylver35\smilecreator\event;
+
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use phpbb\config\config;
 use phpbb\controller\helper;
@@ -50,29 +51,29 @@ class listener implements EventSubscriberInterface
 	 */
 	static public function getSubscribedEvents()
 	{
-		return array(
+		return [
 			'core.generate_smilies_after'				=> 'load_smilies_creator',
 			'core.modify_format_display_text_after'		=> 'parse_bbcodes_after',
 			'core.modify_text_for_display_after'		=> 'parse_bbcodes_after',
-		);
+		];
 	}
 
 	/**
-	 * @param \phpbb\event\data $event
+	 * @param array $event
 	 */
 	public function load_smilies_creator($event)
 	{
 		if ($event['mode'] === 'inline')
 		{
 			$this->language->add_lang('smilie_creator', 'sylver35/smilecreator');
-			$this->template->assign_vars(array(
+			$this->template->assign_vars([
 				'U_SMILIE_CREATOR'	=> $this->helper->route('sylver35_smilecreator_controller'),
-			));
+			]);
 		}
 	}
 
 	/**
-	 * @param \phpbb\event\data $event
+	 * @param array $event
 	 */
 	public function parse_bbcodes_after($event)
 	{

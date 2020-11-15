@@ -15,14 +15,14 @@ class smilecreator_1_1_0 extends migration
 {
 	static public function depends_on()
 	{
-		return array('\sylver35\smilecreator\migrations\release_1_0_0_add_bbcode');
+		return ['\sylver35\smilecreator\migrations\release_1_0_0_add_bbcode'];
 	}
 
 	public function update_data()
 	{
-		return array(
+		return [
 			// Config
-			array('config.add', array('smiliecreator_count', 0)),
-		);
+			['config.add', ['smiliecreator_count', 0]],
+		];
 	}
 }

@@ -82,7 +82,7 @@ class controller
 				}
 				//If we have more than 5 smilies in a row, create a new row
 				$rows = false;
-				if ($j == 5)
+				if ($j === 5)
 				{
 					$rows = true;
 					$j = 0;
@@ -91,13 +91,13 @@ class controller
 				$number = str_replace('smilie', '', $value);
 
 				// Put the smileys into the table
-				$this->template->assign_block_vars('smileys', array(
-					'SRC'			=> $img,
-					'TITLE'			=> $value,
-					'SELECT'		=> $number,
-					'ROWS'			=> $rows,
-					'CHECKED'		=> ($i === 0) ? ' checked="checked"' : '',
-				));
+				$this->template->assign_block_vars('smileys', [
+					'NR'		=> $i,
+					'SRC'		=> $img,
+					'TITLE'		=> $value,
+					'SELECT'	=> $number,
+					'ROWS'		=> $rows,
+				]);
 				$i++;
 				$j++;
 			}
@@ -107,28 +107,33 @@ class controller
 			$this->config->set('smiliecreator_count', $i);
 		}
 
-		$this->template->assign_vars(array(
+		$this->template->assign_vars([
 			'S_IN_CREATE_SMILEY'	=> true,
 			'SMILEY_RANDOM'			=> $i + 1,
 			'SELECT_FONTCOLOR'		=> $this->build_select(true),
 			'SELECT_SHADOWCOLOR'	=> $this->build_select(false),
 			'SMILEYS_SRC'			=> $this->ext_path_web . 'images/',
-		));
+		]);
 
 		return $this->helper->render('smilie_creator.html', $this->language->lang('SMILIE_CREATOR'));
 	}
 
 	public function display_smiley()
 	{
-		$text = $this->request->variable('text', '', true);
-		$smiley = $this->request->variable('smiley', 0);
-		$fontcolor = $this->request->variable('fontcolor', '');
-		$shadowcolor = $this->request->variable('shadowcolor', '');
-		$shieldshadow = $this->request->variable('shieldshadow', 0);
+		$text = (string) $this->request->variable('text', '', true);
+		$smiley = (int) $this->request->variable('smiley', 0);
+		$fontcolor = (string) $this->request->variable('fontcolor', '');
+		$shadowcolor = (string) $this->request->variable('shadowcolor', '');
+		$shieldshadow = (int) $this->request->variable('shieldshadow', 0);
 		$fontwidth = 6;
 		$fontheight = 11;
 		$this->language->add_lang('smilie_creator', 'sylver35/smilecreator');
 
+		// Smilie no exist ?
+		if ($smiley > $this->config['smiliecreator_count'])
+		{
+			$smiley = 0;
+		}
 		// We have a random smilie ?
 		if ($smiley === 0)
 		{
@@ -173,17 +178,10 @@ class controller
 
 		// Main work here
 		$img = @imagecreate($width, $height);
-		if ($img === false)
-		{
-			throw new http_exception(400, 'CREATE_ERROR');
-		}
 		$smiley = @imagecreatefrompng($this->ext_path . 'images/smilie' . $smiley . '.png');
-		if ($smiley === false)
-		{
-			throw new http_exception(400, 'CREATE_ERROR');
-		}
 		$schild = @imagecreatefrompng($this->ext_path . 'images/schild.png');
-		if ($schild === false)
+
+		if ($img === false || $smiley === false || $schild === false)
 		{
 			throw new http_exception(400, 'CREATE_ERROR');
 		}
@@ -203,16 +201,16 @@ class controller
 		$shadow2color = imagecolorallocate($img, 219, 219, 219);
 		$smileycolor = imagecolorsforindex($smiley, imagecolorat($smiley, 5, 14));
 
-		imagesetpixel($schild, 1, 14, imagecolorallocate($schild, ($smileycolor["red"] + 52), ($smileycolor["green"] + 59), ($smileycolor["blue"] + 11)));
-		imagesetpixel($schild, 2, 14, imagecolorallocate($schild, ($smileycolor["red"] + 50), ($smileycolor["green"] + 52), ($smileycolor["blue"] + 50)));
-		imagesetpixel($schild, 1, 15, imagecolorallocate($schild, ($smileycolor["red"] + 50), ($smileycolor["green"] + 52), ($smileycolor["blue"] + 50)));
-		imagesetpixel($schild, 2, 15, imagecolorallocate($schild, ($smileycolor["red"] + 22), ($smileycolor["green"] + 21), ($smileycolor["blue"] + 35)));
+		imagesetpixel($schild, 1, 14, imagecolorallocate($schild, ($smileycolor['red'] + 52), ($smileycolor['green'] + 59), ($smileycolor['blue'] + 11)));
+		imagesetpixel($schild, 2, 14, imagecolorallocate($schild, ($smileycolor['red'] + 50), ($smileycolor['green'] + 52), ($smileycolor['blue'] + 50)));
+		imagesetpixel($schild, 1, 15, imagecolorallocate($schild, ($smileycolor['red'] + 50), ($smileycolor['green'] + 52), ($smileycolor['blue'] + 50)));
+		imagesetpixel($schild, 2, 15, imagecolorallocate($schild, ($smileycolor['red'] + 22), ($smileycolor['green'] + 21), ($smileycolor['blue'] + 35)));
 		imagesetpixel($schild, 1, 16, imagecolorat($smiley, 5, 14));
 		imagesetpixel($schild, 2, 16, imagecolorat($smiley, 5, 14));
-		imagesetpixel($schild, 5, 16, imagecolorallocate($schild, ($smileycolor["red"] + 22), ($smileycolor["green"] + 21), ($smileycolor["blue"] + 35)));
+		imagesetpixel($schild, 5, 16, imagecolorallocate($schild, ($smileycolor['red'] + 22), ($smileycolor['green'] + 21), ($smileycolor['blue'] + 35)));
 		imagesetpixel($schild, 6, 16, imagecolorat($smiley, 5, 14));
-		imagesetpixel($schild, 5, 15, imagecolorallocate($schild, ($smileycolor["red"] + 52), ($smileycolor["green"] + 59), ($smileycolor["blue"] + 11)));
-		imagesetpixel($schild, 6, 15, imagecolorallocate($schild, ($smileycolor["red"] + 50), ($smileycolor["green"] + 52), ($smileycolor["blue"] + 50)));
+		imagesetpixel($schild, 5, 15, imagecolorallocate($schild, ($smileycolor['red'] + 52), ($smileycolor['green'] + 59), ($smileycolor['blue'] + 11)));
+		imagesetpixel($schild, 6, 15, imagecolorallocate($schild, ($smileycolor['red'] + 50), ($smileycolor['green'] + 52), ($smileycolor['blue'] + 50)));
 
 		if (@imagecopy($img, $schild, ($width / 2 - 3), 0, 0, 0, 6, 4) === false)
 		{
@@ -232,8 +230,8 @@ class controller
 
 		if ($shieldshadow)
 		{
-			imagefilledpolygon($img, array((($width - 2) / 2 + ((($width - 2) / 4) - 3)), 5, (($width - 2) / 2 + ((($width - 2) / 4) + 3)), 5, (($width - 2) / 2 - ((($width - 2) / 4) - 3)), ($height - 26), (($width - 2) / 2 - ((($width - 2) / 4) + 3)), ($height - 26)), 4, $shadow1color);
-			imagefilledpolygon($img, array((($width - 2) / 2 + ((($width - 2) / 4) + 4)), 5, ($width - 2), 5, ($width - 2), ($height - 26), (($width - 2) / 2 - ((($width - 2) / 4) - 4)), ($height - 26)), 4, $shadow2color);
+			imagefilledpolygon($img, [(($width - 2) / 2 + ((($width - 2) / 4) - 3)), 5, (($width - 2) / 2 + ((($width - 2) / 4) + 3)), 5, (($width - 2) / 2 - ((($width - 2) / 4) - 3)), ($height - 26), (($width - 2) / 2 - ((($width - 2) / 4) + 3)), ($height - 26)], 4, $shadow1color);
+			imagefilledpolygon($img, [(($width - 2) / 2 + ((($width - 2) / 4) + 4)), 5, ($width - 2), 5, ($width - 2), ($height - 26), (($width - 2) / 2 - ((($width - 2) / 4) - 4)), ($height - 26)], 4, $shadow2color);
 		}
 
 		$i = 0;
@@ -257,16 +255,16 @@ class controller
 		header('Cache-Control: maxage=10');
 		header('Content-Type: image/png');
 		header('Content-Disposition: inline; filename="smilecreator-' . $text . '.png"');
-		$pic = imagepng($img, NULL, -1, PNG_ALL_FILTERS);
-		header('Content-Length: ' . filesize($pic));
+		$image = imagepng($img, NULL, -1, PNG_ALL_FILTERS);
+		header('Content-Length: ' . filesize($image));
 
-		$this->template->assign_vars(array(
-			'SMILEY'	=> $pic,
-		));
+		$this->template->assign_vars([
+			'SMILEY'	=> $image,
+		]);
 
-		$this->template->set_filenames(array(
+		$this->template->set_filenames([
 			'body'	=> '@sylver35_smilecreator/smiley.html'
-		));
+		]);
 
 		garbage_collection();
 		exit_handler();
@@ -274,11 +272,7 @@ class controller
 
 	private function build_select($type)
 	{
-		$value = ($type) ? '000000' : '0';
-		$title = ($type) ? 'COLOR_DEFAULT' : 'SHADOWCOLOR_NO';
-		$title = $this->language->lang($title);
-
-		$list = array(
+		$list = [
 			'silver'	=> 'C0C0C0',
 			'darkred'	=> '8B0000',
 			'red'		=> 'FF0000',
@@ -294,9 +288,9 @@ class controller
 			'black'		=> '000000',
 			'yellow'	=> 'FFFF00',
 			'white'		=> 'FFFFFF',
-		);
+		];
 
-		$select = '<option style="color: black;background-color: white;" value="' . $value . '">' . $title . '</option>';
+		$select = '<option style="color: black;background-color: white;" value="' . (($type) ? '000000' : '0') . '">' . $this->language->lang($type ? 'COLOR_DEFAULT' : 'SHADOWCOLOR_NO') . '</option>';
 
 		foreach ($list as $color => $code)
 		{
@@ -309,12 +303,11 @@ class controller
 
 	private function clean_text($text)
 	{
-		$code = array("'", '"', ',', ';', ':', '!', 'ย', 'ง', '@', '€', '$', '#', '?', '=', '~', '¤', '%', '*', '$', '£', '&lt;', '&gt;', '&quot;', '&amp;', '<', '>', '&');
+		$code = ["'", '"', ',', ';', ':', '!', 'ย', 'ง', '@', '€', '$', '#', '?', '=', '~', '¤', '%', '*', '$', '£', '&lt;', '&gt;', '&quot;', '&amp;', '<', '>', '&'];
 		$text = str_replace($code, '', $text);
-		$code2 = array('  ', 'é', 'ê', 'è', 'ë', 'É', 'Ê', 'È', 'Ë', 'à', 'â', 'ä', 'ã', 'À', 'Â', 'Ä', 'Ã', 'î', 'ï', 'Î', 'Ï', 'ó', 'ò', 'ô', 'ö', 'õ', 'Ó', 'Ò', 'Ô', 'Ö', 'Õ', 'ù', 'û', 'ü', 'Ù', 'Û', 'Ü', 'ç', 'Ç', 'ñ', 'Ñ');
-		$replace = array(' ', 'e', 'e', 'e', 'e', 'E', 'E', 'E', 'E', 'a', 'a', 'a', 'a', 'A', 'A', 'A', 'A', 'i', 'i', 'I', 'I', 'o', 'o', 'o', 'o', 'o', 'O', 'O', 'O', 'O', 'O', 'u', 'u', 'u', 'U', 'U', 'U', 'c', 'c', 'n', 'n');
-		$text = str_replace($code2, $replace, $text);
+		$code2 = ['  ', 'é', 'ê', 'è', 'ë', 'É', 'Ê', 'È', 'Ë', 'à', 'â', 'ä', 'ã', 'À', 'Â', 'Ä', 'Ã', 'î', 'ï', 'Î', 'Ï', 'ó', 'ò', 'ô', 'ö', 'õ', 'Ó', 'Ò', 'Ô', 'Ö', 'Õ', 'ù', 'û', 'ü', 'Ù', 'Û', 'Ü', 'ç', 'Ç', 'ñ', 'Ñ'];
+		$replace = [' ', 'e', 'e', 'e', 'e', 'E', 'E', 'E', 'E', 'a', 'a', 'a', 'a', 'A', 'A', 'A', 'A', 'i', 'i', 'I', 'I', 'o', 'o', 'o', 'o', 'o', 'O', 'O', 'O', 'O', 'O', 'u', 'u', 'u', 'U', 'U', 'U', 'c', 'c', 'n', 'n'];
 
-		return $text;
+		return  str_replace($code2, $replace, $text);
 	}
 }
