@@ -201,16 +201,16 @@ class controller
 		$shadow2color = imagecolorallocate($img, 219, 219, 219);
 		$smileycolor = imagecolorsforindex($smiley, imagecolorat($smiley, 5, 14));
 
-		imagesetpixel($schild, 1, 14, imagecolorallocate($schild, ($smileycolor['red'] + 52), ($smileycolor['green'] + 59), ($smileycolor['blue'] + 11)));
-		imagesetpixel($schild, 2, 14, imagecolorallocate($schild, ($smileycolor['red'] + 50), ($smileycolor['green'] + 52), ($smileycolor['blue'] + 50)));
-		imagesetpixel($schild, 1, 15, imagecolorallocate($schild, ($smileycolor['red'] + 50), ($smileycolor['green'] + 52), ($smileycolor['blue'] + 50)));
-		imagesetpixel($schild, 2, 15, imagecolorallocate($schild, ($smileycolor['red'] + 22), ($smileycolor['green'] + 21), ($smileycolor['blue'] + 35)));
+		imagesetpixel($schild, 1, 14, imagecolorallocate($schild, ((($smileycolor['red'] + 52) > 255) ? 255 : $smileycolor['red'] + 52), ($smileycolor['green'] + 59), ($smileycolor['blue'] + 11)));
+		imagesetpixel($schild, 2, 14, imagecolorallocate($schild, ((($smileycolor['red'] + 50) > 255) ? 255 : $smileycolor['red'] + 50), ($smileycolor['green'] + 52), ($smileycolor['blue'] + 50)));
+		imagesetpixel($schild, 1, 15, imagecolorallocate($schild, ((($smileycolor['red'] + 50) > 255) ? 255 : $smileycolor['red'] + 50), ($smileycolor['green'] + 52), ($smileycolor['blue'] + 50)));
+		imagesetpixel($schild, 2, 15, imagecolorallocate($schild, ((($smileycolor['red'] + 22) > 255) ? 255 : $smileycolor['red'] + 22), ($smileycolor['green'] + 21), ($smileycolor['blue'] + 35)));
 		imagesetpixel($schild, 1, 16, imagecolorat($smiley, 5, 14));
 		imagesetpixel($schild, 2, 16, imagecolorat($smiley, 5, 14));
-		imagesetpixel($schild, 5, 16, imagecolorallocate($schild, ($smileycolor['red'] + 22), ($smileycolor['green'] + 21), ($smileycolor['blue'] + 35)));
+		imagesetpixel($schild, 5, 16, imagecolorallocate($schild, ((($smileycolor['red'] + 22) > 255) ? 255 : $smileycolor['red'] + 22), ($smileycolor['green'] + 21), ($smileycolor['blue'] + 35)));
 		imagesetpixel($schild, 6, 16, imagecolorat($smiley, 5, 14));
-		imagesetpixel($schild, 5, 15, imagecolorallocate($schild, ($smileycolor['red'] + 52), ($smileycolor['green'] + 59), ($smileycolor['blue'] + 11)));
-		imagesetpixel($schild, 6, 15, imagecolorallocate($schild, ($smileycolor['red'] + 50), ($smileycolor['green'] + 52), ($smileycolor['blue'] + 50)));
+		imagesetpixel($schild, 5, 15, imagecolorallocate($schild, ((($smileycolor['red'] + 52) > 255) ? 255 : $smileycolor['red'] + 52), ($smileycolor['green'] + 59), ($smileycolor['blue'] + 11)));
+		imagesetpixel($schild, 6, 15, imagecolorallocate($schild, ((($smileycolor['red'] + 50) > 255) ? 255 : $smileycolor['red'] + 50), ($smileycolor['green'] + 52), ($smileycolor['blue'] + 50)));
 
 		if (@imagecopy($img, $schild, ($width / 2 - 3), 0, 0, 0, 6, 4) === false)
 		{
@@ -255,7 +255,7 @@ class controller
 		header('Cache-Control: maxage=10');
 		header('Content-Type: image/png');
 		header('Content-Disposition: inline; filename="smilecreator-' . $text . '.png"');
-		$image = imagepng($img, NULL, -1, PNG_ALL_FILTERS);
+		$image = @imagepng($img, NULL, -1, PNG_ALL_FILTERS);
 		header('Content-Length: ' . filesize($image));
 
 		$this->template->assign_vars([
@@ -304,9 +304,9 @@ class controller
 	private function clean_text($text)
 	{
 		$text = str_replace(["'", '"', ',', ';', ':', '!', 'ย', 'ง', '@', '€', '$', '#', '?', '=', '~', '¤', '%', '*', '$', '£', '&lt;', '&gt;', '&quot;', '&amp;', '<', '>', '&'], '', $text);
-		$code2 = ['  ', 'é', 'ê', 'è', 'ë', 'É', 'Ê', 'È', 'Ë', 'à', 'â', 'ä', 'ã', 'À', 'Â', 'Ä', 'Ã', 'î', 'ï', 'Î', 'Ï', 'ó', 'ò', 'ô', 'ö', 'õ', 'Ó', 'Ò', 'Ô', 'Ö', 'Õ', 'ù', 'û', 'ü', 'Ù', 'Û', 'Ü', 'ç', 'Ç', 'ñ', 'Ñ'];
+		$list = ['  ', 'é', 'ê', 'è', 'ë', 'É', 'Ê', 'È', 'Ë', 'à', 'â', 'ä', 'ã', 'À', 'Â', 'Ä', 'Ã', 'î', 'ï', 'Î', 'Ï', 'ó', 'ò', 'ô', 'ö', 'õ', 'Ó', 'Ò', 'Ô', 'Ö', 'Õ', 'ù', 'û', 'ü', 'Ù', 'Û', 'Ü', 'ç', 'Ç', 'ñ', 'Ñ'];
 		$replace = [' ', 'e', 'e', 'e', 'e', 'E', 'E', 'E', 'E', 'a', 'a', 'a', 'a', 'A', 'A', 'A', 'A', 'i', 'i', 'I', 'I', 'o', 'o', 'o', 'o', 'o', 'O', 'O', 'O', 'O', 'O', 'u', 'u', 'u', 'U', 'U', 'U', 'c', 'c', 'n', 'n'];
 
-		return  str_replace($code2, $replace, $text);
+		return  str_replace($list, $replace, $text);
 	}
 }
