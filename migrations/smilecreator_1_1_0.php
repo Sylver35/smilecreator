@@ -22,7 +22,7 @@ class smilecreator_1_1_0 extends migration
 	{
 		return [
 			// Config
-			['config.add', ['smiliecreator_count', 0]],
+			['config.add', ['smiliecreator_count', 22]],
 		];
 	}
 }
