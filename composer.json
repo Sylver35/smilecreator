@@ -3,8 +3,8 @@
     "type": "phpbb-extension",
     "description": "Breizh Smilies Creator Extension for phpBB. Allows to create smilies with text you want",
     "homepage": "https://breizhcode.com",
-    "version": "1.2.0",
-    "time": "2020-03-16",
+    "version": "1.3.0",
+    "time": "2020-12-13",
     "keywords": ["phpbb", "extension", "smilies", "creator", "breizh", "breizh smilies creator"],
     "license": "GPL-2.0-only",
     "authors": [{
@@ -14,15 +14,15 @@
             "role": "Developer"
         }],
     "require": {
-        "php": ">=5.4",
+        "php": ">=7.1.3",
         "ext-gd": "*",
         "composer/installers": "~1.0.0",
-        "phpbb/phpbb": ">=3.2.9"
+        "phpbb/phpbb": ">=3.3.1"
     },
     "extra": {
         "display-name": "Breizh Smilies Creator",
         "soft-require": {
-            "phpbb/phpbb": ">=3.2.9"
+            "phpbb/phpbb": ">=3.3.1"
         },
         "version-check": {
             "host": "versions.breizhcode.com",

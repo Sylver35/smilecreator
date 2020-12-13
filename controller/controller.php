@@ -201,16 +201,16 @@ class controller
 		$shadow2color = imagecolorallocate($img, 219, 219, 219);
 		$smileycolor = imagecolorsforindex($smiley, imagecolorat($smiley, 5, 14));
 
-		imagesetpixel($schild, 1, 14, imagecolorallocate($schild, ((($smileycolor['red'] + 52) > 255) ? 255 : $smileycolor['red'] + 52), ($smileycolor['green'] + 59), ($smileycolor['blue'] + 11)));
-		imagesetpixel($schild, 2, 14, imagecolorallocate($schild, ((($smileycolor['red'] + 50) > 255) ? 255 : $smileycolor['red'] + 50), ($smileycolor['green'] + 52), ($smileycolor['blue'] + 50)));
-		imagesetpixel($schild, 1, 15, imagecolorallocate($schild, ((($smileycolor['red'] + 50) > 255) ? 255 : $smileycolor['red'] + 50), ($smileycolor['green'] + 52), ($smileycolor['blue'] + 50)));
-		imagesetpixel($schild, 2, 15, imagecolorallocate($schild, ((($smileycolor['red'] + 22) > 255) ? 255 : $smileycolor['red'] + 22), ($smileycolor['green'] + 21), ($smileycolor['blue'] + 35)));
+		imagesetpixel($schild, 1, 14, imagecolorallocate($schild, $this->clean_nb($smileycolor['red'], 52), $this->clean_nb($smileycolor['green'], 59), $this->clean_nb($smileycolor['blue'], 11)));
+		imagesetpixel($schild, 2, 14, imagecolorallocate($schild, $this->clean_nb($smileycolor['red'], 50), $this->clean_nb($smileycolor['green'], 52), $this->clean_nb($smileycolor['blue'], 50)));
+		imagesetpixel($schild, 1, 15, imagecolorallocate($schild, $this->clean_nb($smileycolor['red'], 50), $this->clean_nb($smileycolor['green'], 52), $this->clean_nb($smileycolor['blue'], 50)));
+		imagesetpixel($schild, 2, 15, imagecolorallocate($schild, $this->clean_nb($smileycolor['red'], 22), $this->clean_nb($smileycolor['green'], 21), $this->clean_nb($smileycolor['blue'], 35)));
 		imagesetpixel($schild, 1, 16, imagecolorat($smiley, 5, 14));
 		imagesetpixel($schild, 2, 16, imagecolorat($smiley, 5, 14));
-		imagesetpixel($schild, 5, 16, imagecolorallocate($schild, ((($smileycolor['red'] + 22) > 255) ? 255 : $smileycolor['red'] + 22), ($smileycolor['green'] + 21), ($smileycolor['blue'] + 35)));
+		imagesetpixel($schild, 5, 16, imagecolorallocate($schild, $this->clean_nb($smileycolor['red'], 22), $this->clean_nb($smileycolor['green'], 21), $this->clean_nb($smileycolor['blue'], 35)));
 		imagesetpixel($schild, 6, 16, imagecolorat($smiley, 5, 14));
-		imagesetpixel($schild, 5, 15, imagecolorallocate($schild, ((($smileycolor['red'] + 52) > 255) ? 255 : $smileycolor['red'] + 52), ($smileycolor['green'] + 59), ($smileycolor['blue'] + 11)));
-		imagesetpixel($schild, 6, 15, imagecolorallocate($schild, ((($smileycolor['red'] + 50) > 255) ? 255 : $smileycolor['red'] + 50), ($smileycolor['green'] + 52), ($smileycolor['blue'] + 50)));
+		imagesetpixel($schild, 5, 15, imagecolorallocate($schild, $this->clean_nb($smileycolor['red'], 52), $this->clean_nb($smileycolor['green'], 59), $this->clean_nb($smileycolor['blue'], 11)));
+		imagesetpixel($schild, 6, 15, imagecolorallocate($schild, $this->clean_nb($smileycolor['red'], 50), $this->clean_nb($smileycolor['green'], 52), $this->clean_nb($smileycolor['blue'], 50)));
 
 		if (@imagecopy($img, $schild, ($width / 2 - 3), 0, 0, 0, 6, 4) === false)
 		{
@@ -308,5 +308,15 @@ class controller
 		$replace = [' ', 'e', 'e', 'e', 'e', 'E', 'E', 'E', 'E', 'a', 'a', 'a', 'a', 'A', 'A', 'A', 'A', 'i', 'i', 'I', 'I', 'o', 'o', 'o', 'o', 'o', 'O', 'O', 'O', 'O', 'O', 'u', 'u', 'u', 'U', 'U', 'U', 'c', 'c', 'n', 'n'];
 
 		return  str_replace($list, $replace, $text);
+	}
+
+	private function clean_nb($nb, $range)
+	{
+		if (($nb + $range) > 255)
+		{
+			$nb = 255;
+		}
+
+		return $nb;
 	}
 }
