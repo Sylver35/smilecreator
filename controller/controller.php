@@ -140,6 +140,9 @@ class controller
 			$smiley = mt_rand(1, (int) $this->config['smiliecreator_count'] - 1);
 		}
 
+		// See if the debug mode is wanted
+		$debug = strrpos($text, 'debug-mode');
+
 		// Clean the text before
 		$text = $this->clean_text($text);
 
@@ -252,11 +255,20 @@ class controller
 		header('Pragma: public');
 		header('Expires: ' . gmdate('D, d M Y H:i:s', time()) . ' GMT');
 		header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . 'GMT');
-		header('Cache-Control: maxage=10');
-		header('Content-Type: image/png');
 		header('Content-Disposition: inline; filename="smilecreator-' . $text . '.png"');
-		$image = @imagepng($img, NULL, -1, PNG_ALL_FILTERS);
-		header('Content-Length: ' . filesize($image));
+		header('Cache-Control: maxage=10');
+		//A good place for debug here if wanted
+		if ($debug === false)
+		{
+			header('Content-Type: image/png');
+			$image = @imagepng($img, NULL, -1, PNG_ALL_FILTERS);
+			header('Content-Length: ' . filesize($image));
+		}
+		else
+		{
+			header('Content-Type: text/html');
+			$image = @imagepng($img, NULL, -1, PNG_ALL_FILTERS);
+		}
 
 		$this->template->assign_vars([
 			'SMILEY'	=> $image,
@@ -303,7 +315,7 @@ class controller
 
 	private function clean_text($text)
 	{
-		$text = str_replace(["'", '"', ',', ';', ':', '!', 'ย', 'ง', '@', '€', '$', '#', '?', '=', '~', '¤', '%', '*', '$', '£', '&lt;', '&gt;', '&quot;', '&amp;', '<', '>', '&'], '', $text);
+		$text = str_replace(["'", '"', ',', ';', '%', '€', '£', '?', '=', '&lt;', '&gt;', '&quot;', '&amp;', '<', '>', '&'], '', $text);
 		$list = ['  ', 'é', 'ê', 'è', 'ë', 'É', 'Ê', 'È', 'Ë', 'à', 'â', 'ä', 'ã', 'À', 'Â', 'Ä', 'Ã', 'î', 'ï', 'Î', 'Ï', 'ó', 'ò', 'ô', 'ö', 'õ', 'Ó', 'Ò', 'Ô', 'Ö', 'Õ', 'ù', 'û', 'ü', 'Ù', 'Û', 'Ü', 'ç', 'Ç', 'ñ', 'Ñ'];
 		$replace = [' ', 'e', 'e', 'e', 'e', 'E', 'E', 'E', 'E', 'a', 'a', 'a', 'a', 'A', 'A', 'A', 'A', 'i', 'i', 'I', 'I', 'o', 'o', 'o', 'o', 'o', 'O', 'O', 'O', 'O', 'O', 'u', 'u', 'u', 'U', 'U', 'U', 'c', 'c', 'n', 'n'];
 
@@ -314,9 +326,9 @@ class controller
 	{
 		if (($nb + $range) > 255)
 		{
-			$nb = 255;
+			return 255;
 		}
 
-		return $nb;
+		return $nb + $range;
 	}
 }
