@@ -196,7 +196,7 @@ class controller
 		else
 		{
 			header('Content-Type: image/png');
-			header('Content-Length: ' . @filesize(/** @scrutinizer ignore-type */$image));
+			header('Content-Length: ' . /** @scrutinizer ignore-type */ @filesize(/** @scrutinizer ignore-type */$image));
 		}
 
 		$this->template->assign_var('SMILEY', $image);
