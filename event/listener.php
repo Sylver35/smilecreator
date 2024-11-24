@@ -3,7 +3,7 @@
 /**
  * @author		Sylver35 <webmaster@breizhcode.com>
  * @package		Breizh Smilie Creator Extension
- * @copyright	(c) 2018-2020 Sylver35  https://breizhcode.com
+ * @copyright	(c) 2019-2024 Sylver35  https://breizhcode.com
  * @license		http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
 
@@ -66,9 +66,7 @@ class listener implements EventSubscriberInterface
 		if ($event['mode'] === 'inline')
 		{
 			$this->language->add_lang('smilie_creator', 'sylver35/smilecreator');
-			$this->template->assign_vars([
-				'U_SMILIE_CREATOR'	=> $this->helper->route('sylver35_smilecreator_controller'),
-			]);
+			$this->template->assign_var('U_SMILIE_CREATOR', $this->helper->route('sylver35_smilecreator_controller'));
 		}
 	}
 
@@ -79,14 +77,8 @@ class listener implements EventSubscriberInterface
 	{
 		if (strpos($event['text'], 'S_CREATOR_BBCODE') !== false)
 		{
-			if ($this->config['enable_mod_rewrite'])
-			{
-				$event['text'] = str_replace('%7CS_CREATOR_BBCODE%7Capp.php', generate_board_url(), $event['text']);
-			}
-			else
-			{
-				$event['text'] = str_replace('%7CS_CREATOR_BBCODE%7Capp.php', generate_board_url() . '/app.' . $this->php_ext, $event['text']);
-			}
+			$app = (!$this->config['enable_mod_rewrite']) ? '/app.' . $this->php_ext : '';
+			$event['text'] = str_replace('%7CS_CREATOR_BBCODE%7Capp.php', generate_board_url() . $app, $event['text']);
 		}
 	}
 }

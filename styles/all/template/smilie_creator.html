@@ -10,7 +10,7 @@
 						<label for="schildtext">{{ lang('SHIELDTEXT') }}:</label>
 					</dt>
 					<dd class="dd-smiley">
-						<input class="inputbox autowidth" type="text" id="schildtext" name="schildtext" size="40" maxlength="200" spellcheck="true" />
+						<input class="inputbox autowidth" type="text" id="schildtext" name="schildtext" size="40" maxlength="200" spellcheck="true">
 					</dd>
 				</dl>
 				<dl class="fields2">
@@ -58,8 +58,8 @@
 								<div class="row-smiley">
 								{% endif %}
 									<span class="cell-smiley">
-										<input type="radio" class="radio" name="smilie" id="smilie{{ smiley.SELECT }}" title="{{ smiley.TITLE }}" value="{{ smiley.SELECT }}"{{ smiley.CHECKED }} /> 
-										<img src="{{ SMILEYS_SRC }}{{ smiley.SRC }}" alt="{{ smiley.TITLE }}" title="{{ smiley.TITLE }}" />
+										<input type="radio" class="radio" name="smilie" id="smilie{{ smiley.SELECT }}" title="{{ smiley.TITLE }}" value="{{ smiley.SELECT }}"> 
+										<img src="{{ SMILEYS_SRC }}{{ smiley.SRC }}" alt="{{ smiley.TITLE }}" title="{{ smiley.TITLE }}">
 									</span>
 								{% endfor %}
 								</div>
@@ -67,7 +67,7 @@
 							<div class="table-smiley">
 								<div class="row-smiley">
 									<span class="cell-random">
-										<input type="radio" class="radio" name="smilie" id="random_smilie" title="{{ lang('RANDOM_SMILIE') }}" value="{{ SMILEY_RANDOM }}" /> {{ lang('RANDOM_SMILIE') }}
+										<input type="radio" class="radio" name="smilie" id="random_smilie" title="{{ lang('RANDOM_SMILIE') }}" value="{{ SMILEY_RANDOM }}" checked="checked"> {{ lang('RANDOM_SMILIE') }}
 									</span>
 								</div>
 							</div>

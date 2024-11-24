@@ -1,8 +1,12 @@
 # phpBB Breizh Smilies Creator Extension
 
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Sylver35/smilecreator/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Sylver35/smilecreator/?branch=master)
-[![Build Status](https://scrutinizer-ci.com/g/Sylver35/smilecreator/badges/build.png?b=master)](https://scrutinizer-ci.com/g/Sylver35/smilecreator/build-status/master)
-[![Code Intelligence Status](https://scrutinizer-ci.com/g/Sylver35/smilecreator/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Sylver35/smilecreator/badges/quality-score.png?b=1.5.0)](https://scrutinizer-ci.com/g/Sylver35/smilecreator/?branch=1.5.0)
+[![Build Status](https://scrutinizer-ci.com/g/Sylver35/smilecreator/badges/build.png?b=1.5.0)](https://scrutinizer-ci.com/g/Sylver35/smilecreator/build-status/1.5.0)
+[![Code Intelligence Status](https://scrutinizer-ci.com/g/Sylver35/smilecreator/badges/code-intelligence.svg?b=1.5.0)](https://scrutinizer-ci.com/code-intelligence)
+
+## Minimum Requirements
+* phpBB 3.3.13
+* PHP 7.2
 
 ## Install
 
@@ -20,5 +24,6 @@
 3. To permanently uninstall, click `Delete Data` and then delete the `/ext/sylver35/smilecreator` folder.
 
 ## License
-
 [GNU General Public License v2](http://opensource.org/licenses/GPL-2.0)
+
+© 2024 - Sylver35

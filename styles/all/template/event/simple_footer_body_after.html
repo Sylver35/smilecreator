@@ -4,12 +4,12 @@ $(document).ready(function(){
 	$('#phpbb').css('padding', '0');
 	$('#wrap').css({'margin':'0 auto','padding':'0','border':'none','max-width':'100%'});
 	$('#page-body').css('margin', '0');
-	var $copy = $('.copyright').html();
-	$('.copyright').html($copy+"<br />{{ lang('SC_COPY') | escape('js') }}");
+	var $copy = $('.copyright').html(),copy = "{{ lang('SC_COPY')|escape('js') }}";
+	$('.copyright').html('<p class="footer-row"><span class="footer-copyright">'+copy+'</span></p>'+$copy);
 });
 var form_name = 'postform',text_name = 'message';
 function createSmilie(){
-	var text2form = '',caract = new RegExp('[\'",;:.!ยง@&€£¥¤§$#?©®{}=~%*$\/]', 'gi');
+	var text2form = '',caract = new RegExp('[\'",;:!ยง@&€£¥¤§$#?©®{}=~%*$\/]', 'gi');
 	if($('#chat_message', window.opener.document) !== null){
 		text_name = 'chat_message';
 	}
@@ -30,7 +30,7 @@ function createSmilie(){
 		}
 		window.close();
 	}else{
-		alert("{{ lang('SC_ERROR') | escape('js') }}");
+		alert("{{ lang('SC_ERROR')|escape('js') }}");
 	}
 }
 function update_select(id,value,text,sort){

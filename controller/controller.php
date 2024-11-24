@@ -3,7 +3,7 @@
 /**
  * @author		Sylver35 <webmaster@breizhcode.com>
  * @package		Breizh Smilie Creator Extension
- * @copyright	(c) 2018-2020 Sylver35  https://breizhcode.com
+ * @copyright	(c) 2019-2024 Sylver35  https://breizhcode.com
  * @license		http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
 
@@ -141,12 +141,13 @@ class controller
 		}
 
 		// See if the debug mode is wanted
-		$debug = strrpos($text, 'debug-mode');
+		$debug = (strrpos($text, 'debug-mode') !== false) ? true : false;
 
 		// Clean the text before
 		$text = $this->clean_text($text);
 
 		$output = [];
+		$char_count = 40;
 		$nb = mb_strlen($text);
 		if ($nb > 40)
 		{
@@ -165,7 +166,6 @@ class controller
 			{
 				$output[1] = substr($text, 40, 40);
 			}
-			$char_count = 40;
 		}
 		else
 		{
@@ -180,99 +180,26 @@ class controller
 		$height = ($out * $fontheight) + 35;
 
 		// Main work here
-		$img = @imagecreate($width, $height);
-		$smiley = @imagecreatefrompng($this->ext_path . 'images/smilie' . $smiley . '.png');
-		$schild = @imagecreatefrompng($this->ext_path . 'images/schild.png');
-
-		if ($img === false || $smiley === false || $schild === false)
-		{
-			throw new http_exception(400, 'CREATE_ERROR');
-		}
-
-		$r1 = (int) hexdec(substr($fontcolor, 0, 2));
-		$g1 = (int) hexdec(substr($fontcolor, 2, 2));
-		$b1 = (int) hexdec(substr($fontcolor, 4, 2));
-		$r2 = (int) hexdec(substr($shadowcolor, 0, 2));
-		$g2 = (int) hexdec(substr($shadowcolor, 2, 2));
-		$b2 = (int) hexdec(substr($shadowcolor, 4, 2));
-		$bgcolor = imagecolorallocate($img, 111, 252, 134);
-		$txtcolor = imagecolorallocate($img, $r1, $g1, $b1);
-		$txt2color = imagecolorallocate($img, $r2, $g2, $b2);
-		$bocolor = imagecolorallocate($img, 0, 0, 0);
-		$schcolor = imagecolorallocate($img, 255, 255, 255);
-		$shadow1color = imagecolorallocate($img, 235, 235, 235);
-		$shadow2color = imagecolorallocate($img, 219, 219, 219);
-		$smileycolor = imagecolorsforindex($smiley, imagecolorat($smiley, 5, 14));
-
-		imagesetpixel($schild, 1, 14, imagecolorallocate($schild, $this->clean_nb($smileycolor['red'], 52), $this->clean_nb($smileycolor['green'], 59), $this->clean_nb($smileycolor['blue'], 11)));
-		imagesetpixel($schild, 2, 14, imagecolorallocate($schild, $this->clean_nb($smileycolor['red'], 50), $this->clean_nb($smileycolor['green'], 52), $this->clean_nb($smileycolor['blue'], 50)));
-		imagesetpixel($schild, 1, 15, imagecolorallocate($schild, $this->clean_nb($smileycolor['red'], 50), $this->clean_nb($smileycolor['green'], 52), $this->clean_nb($smileycolor['blue'], 50)));
-		imagesetpixel($schild, 2, 15, imagecolorallocate($schild, $this->clean_nb($smileycolor['red'], 22), $this->clean_nb($smileycolor['green'], 21), $this->clean_nb($smileycolor['blue'], 35)));
-		imagesetpixel($schild, 1, 16, imagecolorat($smiley, 5, 14));
-		imagesetpixel($schild, 2, 16, imagecolorat($smiley, 5, 14));
-		imagesetpixel($schild, 5, 16, imagecolorallocate($schild, $this->clean_nb($smileycolor['red'], 22), $this->clean_nb($smileycolor['green'], 21), $this->clean_nb($smileycolor['blue'], 35)));
-		imagesetpixel($schild, 6, 16, imagecolorat($smiley, 5, 14));
-		imagesetpixel($schild, 5, 15, imagecolorallocate($schild, $this->clean_nb($smileycolor['red'], 52), $this->clean_nb($smileycolor['green'], 59), $this->clean_nb($smileycolor['blue'], 11)));
-		imagesetpixel($schild, 6, 15, imagecolorallocate($schild, $this->clean_nb($smileycolor['red'], 50), $this->clean_nb($smileycolor['green'], 52), $this->clean_nb($smileycolor['blue'], 50)));
-
-		if (@imagecopy($img, $schild, ($width / 2 - 3), 0, 0, 0, 6, 4) === false)
-		{
-			throw new http_exception(400, 'CREATE_ERROR');
-		}
-		if (@imagecopy($img, $schild, ($width / 2 - 3), ($height - 24), 0, 5, 9, 17) === false)
-		{
-			throw new http_exception(400, 'CREATE_ERROR');
-		}
-		if (@imagecopy($img, $smiley, ($width / 2 + 6), ($height - 24), 0, 0, 23, 23) === false)
-		{
-			throw new http_exception(400, 'CREATE_ERROR');
-		}
-
-		imagefilledrectangle($img, 0, 4, $width, ($height - 25), $bocolor);
-		imagefilledrectangle($img, 1, 5, ($width - 2), ($height - 26), $schcolor);
-
-		if ($shieldshadow)
-		{
-			imagefilledpolygon($img, [(($width - 2) / 2 + ((($width - 2) / 4) - 3)), 5, (($width - 2) / 2 + ((($width - 2) / 4) + 3)), 5, (($width - 2) / 2 - ((($width - 2) / 4) - 3)), ($height - 26), (($width - 2) / 2 - ((($width - 2) / 4) + 3)), ($height - 26)], 4, $shadow1color);
-			imagefilledpolygon($img, [(($width - 2) / 2 + ((($width - 2) / 4) + 4)), 5, ($width - 2), 5, ($width - 2), ($height - 26), (($width - 2) / 2 - ((($width - 2) / 4) - 4)), ($height - 26)], 4, $shadow2color);
-		}
-
-		$i = 0;
-		while ($i < sizeof($output))
-		{
-			if ($shadowcolor)
-			{
-				imagestring($img, 2, (($width - (strlen(trim($output[$i])) * $fontwidth) - 2) / 2 + 1), ($i * $fontheight + 6), trim($output[$i]), $txt2color);
-			}
-			imagestring($img, 2, (($width - (strlen(trim($output[$i])) * $fontwidth) - 2) / 2), ($i * $fontheight + 5), trim($output[$i]), $txtcolor);
-			$i++;
-		}
-
-		imagecolortransparent($img, $bgcolor);
-		imageinterlace($img, 1);
-
-		// Send the image to the browser
+		// Create image and send it to the browser
+		$image = @imagepng($this->create_img($smiley, $width, $height, $fontcolor, $shadowcolor, $shieldshadow, $fontwidth, $fontheight, $output), NULL, -1, PNG_ALL_FILTERS);
 		header('Pragma: public');
 		header('Expires: ' . gmdate('D, d M Y H:i:s', time()) . ' GMT');
 		header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . 'GMT');
 		header('Content-Disposition: inline; filename="smilecreator-' . $text . '.png"');
 		header('Cache-Control: maxage=10');
-		//A good place for debug here if wanted
-		if ($debug === false)
+
+		// A good place for debug here if wanted
+		if ($debug !== false)
 		{
-			header('Content-Type: image/png');
-			$image = @imagepng($img, NULL, -1, PNG_ALL_FILTERS);
-			header('Content-Length: ' . filesize($image));
+			header('Content-Type: text/html');
 		}
 		else
 		{
-			header('Content-Type: text/html');
-			$image = @imagepng($img, NULL, -1, PNG_ALL_FILTERS);
+			header('Content-Type: image/png');
+			header('Content-Length: ' . @filesize(/** @scrutinizer ignore-type */$image));
 		}
 
-		$this->template->assign_vars([
-			'SMILEY'	=> $image,
-		]);
+		$this->template->assign_var('SMILEY', $image);
 
 		$this->template->set_filenames([
 			'body'	=> '@sylver35_smilecreator/smiley.html'
@@ -315,20 +242,91 @@ class controller
 
 	private function clean_text($text)
 	{
-		$text = str_replace(["'", '"', ',', ';', '%', '€', '£', '?', '=', '&lt;', '&gt;', '&quot;', '&amp;', '<', '>', '&'], '', $text);
-		$list = ['  ', 'é', 'ê', 'è', 'ë', 'É', 'Ê', 'È', 'Ë', 'à', 'â', 'ä', 'ã', 'À', 'Â', 'Ä', 'Ã', 'î', 'ï', 'Î', 'Ï', 'ó', 'ò', 'ô', 'ö', 'õ', 'Ó', 'Ò', 'Ô', 'Ö', 'Õ', 'ù', 'û', 'ü', 'Ù', 'Û', 'Ü', 'ç', 'Ç', 'ñ', 'Ñ'];
-		$replace = [' ', 'e', 'e', 'e', 'e', 'E', 'E', 'E', 'E', 'a', 'a', 'a', 'a', 'A', 'A', 'A', 'A', 'i', 'i', 'I', 'I', 'o', 'o', 'o', 'o', 'o', 'O', 'O', 'O', 'O', 'O', 'u', 'u', 'u', 'U', 'U', 'U', 'c', 'c', 'n', 'n'];
-
-		return  str_replace($list, $replace, $text);
+		return  str_replace(
+			['  ', 'é', 'ê', 'è', 'ë', 'É', 'Ê', 'È', 'Ë', 'à', 'â', 'ä', 'ã', 'À', 'Â', 'Ä', 'Ã', 'î', 'ï', 'Î', 'Ï', 'ó', 'ò', 'ô', 'ö', 'õ', 'Ó', 'Ò', 'Ô', 'Ö', 'Õ', 'ù', 'û', 'ü', 'Ù', 'Û', 'Ü', 'ç', 'Ç', 'ñ', 'Ñ'],
+			[' ', 'e', 'e', 'e', 'e', 'E', 'E', 'E', 'E', 'a', 'a', 'a', 'a', 'A', 'A', 'A', 'A', 'i', 'i', 'I', 'I', 'o', 'o', 'o', 'o', 'o', 'O', 'O', 'O', 'O', 'O', 'u', 'u', 'u', 'U', 'U', 'U', 'c', 'c', 'n', 'n'],
+			str_replace(["'", '"', ',', ';', '%', '€', '£', '?', '=', '&lt;', '&gt;', '&quot;', '&amp;', '<', '>', '&'], '', $text)
+		);
 	}
 
 	private function clean_nb($nb, $range)
 	{
-		if (($nb + $range) > 255)
+		return (($nb + $range) > 255) ? 255 : $nb + $range;
+	}
+
+	private function create_img($smiley, $width, $height, $fontcolor, $shadowcolor, $shieldshadow, $fontwidth, $fontheight, $output)
+	{
+		$image = @imagecreate($width, $height);
+		$smiley = @imagecreatefrompng($this->ext_path . 'images/smilie' . $smiley . '.png');
+		$schild = @imagecreatefrompng($this->ext_path . 'images/schild.png');
+
+		if ($image === false || $smiley === false || $schild === false)
 		{
-			return 255;
+			throw new http_exception(400, 'CREATE_ERROR');
 		}
 
-		return $nb + $range;
+		$r1 = (int) hexdec(substr($fontcolor, 0, 2));
+		$g1 = (int) hexdec(substr($fontcolor, 2, 2));
+		$b1 = (int) hexdec(substr($fontcolor, 4, 2));
+		$r2 = (int) hexdec(substr($shadowcolor, 0, 2));
+		$g2 = (int) hexdec(substr($shadowcolor, 2, 2));
+		$b2 = (int) hexdec(substr($shadowcolor, 4, 2));
+		$bgcolor = imagecolorallocate($image, 111, 252, 134);
+		$txtcolor = imagecolorallocate($image, $r1, $g1, $b1);
+		$txt2color = imagecolorallocate($image, $r2, $g2, $b2);
+		$bocolor = imagecolorallocate($image, 0, 0, 0);
+		$schcolor = imagecolorallocate($image, 255, 255, 255);
+		$shadow1color = imagecolorallocate($image, 235, 235, 235);
+		$shadow2color = imagecolorallocate($image, 219, 219, 219);
+		$smileycolor = imagecolorsforindex($smiley, imagecolorat($smiley, 5, 14));
+
+		imagesetpixel($schild, 1, 14, imagecolorallocate($schild, $this->clean_nb($smileycolor['red'], 52), $this->clean_nb($smileycolor['green'], 59), $this->clean_nb($smileycolor['blue'], 11)));
+		imagesetpixel($schild, 2, 14, imagecolorallocate($schild, $this->clean_nb($smileycolor['red'], 50), $this->clean_nb($smileycolor['green'], 52), $this->clean_nb($smileycolor['blue'], 50)));
+		imagesetpixel($schild, 1, 15, imagecolorallocate($schild, $this->clean_nb($smileycolor['red'], 50), $this->clean_nb($smileycolor['green'], 52), $this->clean_nb($smileycolor['blue'], 50)));
+		imagesetpixel($schild, 2, 15, imagecolorallocate($schild, $this->clean_nb($smileycolor['red'], 22), $this->clean_nb($smileycolor['green'], 21), $this->clean_nb($smileycolor['blue'], 35)));
+		imagesetpixel($schild, 1, 16, imagecolorat($smiley, 5, 14));
+		imagesetpixel($schild, 2, 16, imagecolorat($smiley, 5, 14));
+		imagesetpixel($schild, 5, 16, imagecolorallocate($schild, $this->clean_nb($smileycolor['red'], 22), $this->clean_nb($smileycolor['green'], 21), $this->clean_nb($smileycolor['blue'], 35)));
+		imagesetpixel($schild, 6, 16, imagecolorat($smiley, 5, 14));
+		imagesetpixel($schild, 5, 15, imagecolorallocate($schild, $this->clean_nb($smileycolor['red'], 52), $this->clean_nb($smileycolor['green'], 59), $this->clean_nb($smileycolor['blue'], 11)));
+		imagesetpixel($schild, 6, 15, imagecolorallocate($schild, $this->clean_nb($smileycolor['red'], 50), $this->clean_nb($smileycolor['green'], 52), $this->clean_nb($smileycolor['blue'], 50)));
+
+		if (@imagecopy($image, $schild, ($width / 2 - 3), 0, 0, 0, 6, 4) === false)
+		{
+			throw new http_exception(400, 'CREATE_ERROR');
+		}
+		if (@imagecopy($image, $schild, ($width / 2 - 3), ($height - 24), 0, 5, 9, 17) === false)
+		{
+			throw new http_exception(400, 'CREATE_ERROR');
+		}
+		if (@imagecopy($image, $smiley, ($width / 2 + 6), ($height - 24), 0, 0, 23, 23) === false)
+		{
+			throw new http_exception(400, 'CREATE_ERROR');
+		}
+
+		imagefilledrectangle($image, 0, 4, $width, ($height - 25), $bocolor);
+		imagefilledrectangle($image, 1, 5, ($width - 2), ($height - 26), $schcolor);
+
+		if ($shieldshadow)
+		{
+			imagefilledpolygon($image, [(($width - 2) / 2 + ((($width - 2) / 4) - 3)), 5, (($width - 2) / 2 + ((($width - 2) / 4) + 3)), 5, (($width - 2) / 2 - ((($width - 2) / 4) - 3)), ($height - 26), (($width - 2) / 2 - ((($width - 2) / 4) + 3)), ($height - 26)], 4, $shadow1color);
+			imagefilledpolygon($image, [(($width - 2) / 2 + ((($width - 2) / 4) + 4)), 5, ($width - 2), 5, ($width - 2), ($height - 26), (($width - 2) / 2 - ((($width - 2) / 4) - 4)), ($height - 26)], 4, $shadow2color);
+		}
+
+		$i = 0;
+		while ($i < sizeof($output))
+		{
+			if ($shadowcolor)
+			{
+				imagestring($image, 2, (($width - (strlen(trim($output[$i])) * $fontwidth) - 2) / 2 + 1), ($i * $fontheight + 6), trim($output[$i]), $txt2color);
+			}
+			imagestring($image, 2, (($width - (strlen(trim($output[$i])) * $fontwidth) - 2) / 2), ($i * $fontheight + 5), trim($output[$i]), $txtcolor);
+			$i++;
+		}
+
+		imagecolortransparent($image, $bgcolor);
+		imageinterlace($image, 1);
+
+		return $image;
 	}
 }

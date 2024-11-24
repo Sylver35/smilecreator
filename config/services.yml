@@ -19,3 +19,6 @@ services:
             - '@language'
             - '%core.root_path%'
             - '%core.php_ext%'
+
+    _defaults:
+        public: true

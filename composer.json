@@ -1,47 +1,33 @@
 {
-    "name": "sylver35/smiliescat",
+    "name": "sylver35/smilecreator",
     "type": "phpbb-extension",
-    "description": "This extension add categories for the smilies.",
+    "description": "Breizh Smilies Creator Extension for phpBB. Allows to create smilies with text you want",
     "homepage": "https://breizhcode.com",
-    "version": "1.6.1",
-    "time": "2023-07-23",
-    "keywords": [
-        "phpbb",
-        "extension",
-        "breizh",
-        "smiley",
-        "smilies",
-        "categories",
-        "posting"
-    ],
+    "version": "1.5.0",
+    "time": "2024-11-24",
+    "keywords": ["phpbb", "extension", "smilies", "creator", "breizh", "breizh smilies creator"],
     "license": "GPL-2.0-only",
-    "authors": [
-        {
+    "authors": [{
             "name": "Sylver35",
-            "homepage": "https://breizhcode.com",
             "email": "webmaster@breizhcode.com",
-            "role": "Extension Developer"
-        },
-        {
-            "name": "Skouat",
-            "homepage": "https://skouat.github.io/",
+            "homepage": "https://breizhcode.com",
             "role": "Developer"
-        }
-    ],
-   "require": {
+        }],
+    "require": {
         "php": ">=7.2",
+        "ext-gd": "*",
         "composer/installers": "~2.0.0",
         "phpbb/phpbb": ">=3.3.13"
     },
     "extra": {
-        "display-name": "Breizh Smilies Categories",
+        "display-name": "Breizh Smilies Creator",
         "soft-require": {
             "phpbb/phpbb": ">=3.3.13"
         },
         "version-check": {
             "host": "breizhversions.com",
-            "directory": "/smiliescat",
-            "filename": "version_check.json",
+            "directory": "/smilecreator",
+            "filename": "/version_check.json",
             "ssl": true
         }
     }
