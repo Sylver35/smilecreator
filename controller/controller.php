@@ -196,7 +196,7 @@ class controller
 		else
 		{
 			header('Content-Type: image/png');
-			if ($filesize = filesize($image) !== false)
+			if ($filesize = filesize($image))
 			{
 				header('Content-Length: ' . $filesize);
 			}
