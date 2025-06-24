@@ -182,6 +182,21 @@ class controller
 		// Main work here
 		// Create image and send it to the browser
 		$image = @imagepng($this->create_img($smiley, $width, $height, $fontcolor, $shadowcolor, $shieldshadow, $fontwidth, $fontheight, $output), NULL, -1, PNG_ALL_FILTERS);
+		// Build headers now
+		$this->build_headers($image, $text, $debug);
+
+		$this->template->assign_var('SMILEY', $image);
+
+		$this->template->set_filenames([
+			'body'	=> '@sylver35_smilecreator/smiley.html'
+		]);
+
+		garbage_collection();
+		exit_handler();
+	}
+
+	private function build_headers($image, $text, $debug)
+	{
 		header('Pragma: public');
 		header('Expires: ' . gmdate('D, d M Y H:i:s', time()) . ' GMT');
 		header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . 'GMT');
@@ -201,15 +216,6 @@ class controller
 				header('Content-Length: ' . $filesize);
 			}
 		}
-
-		$this->template->assign_var('SMILEY', $image);
-
-		$this->template->set_filenames([
-			'body'	=> '@sylver35_smilecreator/smiley.html'
-		]);
-
-		garbage_collection();
-		exit_handler();
 	}
 
 	private function build_select($type)
