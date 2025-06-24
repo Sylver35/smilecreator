@@ -3,7 +3,7 @@
 /**
  * @author		Sylver35 <webmaster@breizhcode.com>
  * @package		Breizh Smilie Creator Extension
- * @copyright	(c) 2019-2024 Sylver35  https://breizhcode.com
+ * @copyright	(c) 2019-2025 Sylver35  https://breizhcode.com
  * @license		http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
 
@@ -196,7 +196,10 @@ class controller
 		else
 		{
 			header('Content-Type: image/png');
-			header('Content-Length: ' . /** @scrutinizer ignore-type */ @filesize(/** @scrutinizer ignore-type */$image));
+			if ($filesize = filesize($image) !== false)
+			{
+				header('Content-Length: ' . $filesize);
+			}
 		}
 
 		$this->template->assign_var('SMILEY', $image);
