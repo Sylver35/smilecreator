@@ -181,7 +181,7 @@ class controller
 
 		// Main work here
 		// Create image and send it to the browser
-		$image = @imagepng($this->create_img($smiley, $width, $height, $fontcolor, $shadowcolor, $shieldshadow, $fontwidth, $fontheight, $output), NULL, -1, PNG_ALL_FILTERS);
+		$image = @imagepng($this->create_img($smiley, $width, $height, $fontcolor, $shadowcolor, $shieldshadow, $fontwidth, $fontheight, $output), NULL, 0, PNG_ALL_FILTERS);
 		header('Pragma: public');
 		header('Expires: ' . gmdate('D, d M Y H:i:s', time()) . ' GMT');
 		header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . 'GMT');
@@ -196,7 +196,7 @@ class controller
 		else
 		{
 			header('Content-Type: image/png');
-			if ($filesize = filesize($image))
+			if ($filesize = filesize(/** @scrutinizer ignore-type */$image))
 			{
 				header('Content-Length: ' . $filesize);
 			}
