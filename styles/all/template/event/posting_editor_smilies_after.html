@@ -1,3 +1,3 @@
-{% if S_SMILIES_ALLOWED %}
+{% if S_SMILIES_ALLOWED and U_SMILIE_CREATOR %}
 	<br><a href="{{ U_SMILIE_CREATOR }}" title="{{ lang('SMILIE_CREATOR') }}" onclick="popup(this.href, 650, 550, '_phpbbsmiliescreate');return false;">{{ lang('SMILIE_CREATOR') }}</a>
 {% endif %}

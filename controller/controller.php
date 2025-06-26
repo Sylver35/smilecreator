@@ -129,16 +129,7 @@ class controller
 		$fontheight = 11;
 		$this->language->add_lang('smilie_creator', 'sylver35/smilecreator');
 
-		// Smilie no exist ?
-		if ($smiley > $this->config['smiliecreator_count'])
-		{
-			$smiley = 0;
-		}
-		// We have a random smilie ?
-		if ($smiley === 0)
-		{
-			$smiley = mt_rand(1, (int) $this->config['smiliecreator_count'] - 1);
-		}
+		$smiley = $this->sort_smiley($smiley);
 
 		// See if the debug mode is wanted
 		$debug = (strrpos($text, 'debug-mode') !== false) ? true : false;
@@ -218,6 +209,22 @@ class controller
 		}
 	}
 
+	private function sort_smiley($smiley)
+	{
+		// Smilie no exist ?
+		if ($smiley > $this->config['smiliecreator_count'])
+		{
+			$smiley = 0;
+		}
+		// We have a random smilie ?
+		if ($smiley === 0)
+		{
+			$smiley = mt_rand(1, (int) $this->config['smiliecreator_count'] - 1);
+		}
+
+		return $smiley;
+	}
+
 	private function build_select($type)
 	{
 		$list = [
@@ -260,7 +267,8 @@ class controller
 
 	private function clean_nb($nb, $range)
 	{
-		return (($nb + $range) > 255) ? 255 : $nb + $range;
+		$total = $nb + $range;
+		return ($total > 255) ? 255 : $total;
 	}
 
 	private function create_img($smiley, $width, $height, $fontcolor, $shadowcolor, $shieldshadow, $fontwidth, $fontheight, $output)

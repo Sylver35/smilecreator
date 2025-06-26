@@ -6,6 +6,7 @@ services:
             - '@controller.helper'
             - '@template'
             - '@language'
+            - '@auth'
             - '%core.php_ext%'
         tags:
             - { name: event.listener }
