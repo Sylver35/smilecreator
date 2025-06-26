@@ -81,7 +81,7 @@ class listener implements EventSubscriberInterface
 	 */
 	public function parse_bbcodes_after($event)
 	{
-		if (strpos($event['text'], 'S_CREATOR_BBCODE') !== false)
+		if ($event['text'] && (strpos($event['text'], 'S_CREATOR_BBCODE') !== false))
 		{
 			$app = (!$this->config['enable_mod_rewrite']) ? '/app.' . $this->php_ext : '';
 			$event['text'] = str_replace('%7CS_CREATOR_BBCODE%7Capp.php', generate_board_url() . $app, $event['text']);
@@ -93,8 +93,11 @@ class listener implements EventSubscriberInterface
 	 */
 	public function permissions($event)
 	{
-		$permissions = $event['permissions'];
-		$permissions['u_creator_use'] = ['lang'	=> 'ACL_U_CREATOR_USE',	'cat'	=> 'misc'];
-		$event['permissions'] = $permissions;
+		$event['permissions'] = array_merge($event['permissions'], [
+			'u_creator_use'	=> [
+				'lang'		=> 'ACL_U_CREATOR_USE',
+				'cat'		=> 'misc',
+			],
+		]);
 	}
 }
