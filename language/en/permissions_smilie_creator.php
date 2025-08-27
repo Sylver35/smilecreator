@@ -37,5 +37,5 @@ if (empty($lang) || !is_array($lang))
 //
 
 $lang = array_merge($lang, array(
-	'ACL_U_CREATOR_USE'		=> 'Can use the smiley creator',
+	'ACL_U_CREATOR_USE'		=> 'Can use the smilie creator',
 ));

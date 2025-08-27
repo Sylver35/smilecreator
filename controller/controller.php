@@ -191,7 +191,7 @@ class controller
 		header('Pragma: public');
 		header('Expires: ' . gmdate('D, d M Y H:i:s', time()) . ' GMT');
 		header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . 'GMT');
-		header('Content-Disposition: inline; filename="smilecreator-' . $text . '.png"');
+		header('Content-Disposition: filename="smilecreator-' . html_entity_decode($text) . '.png"');
 		header('Cache-Control: maxage=10');
 
 		// A good place for debug here if wanted
@@ -202,10 +202,6 @@ class controller
 		else
 		{
 			header('Content-Type: image/png');
-			if ($filesize = filesize(/** @scrutinizer ignore-type */$image))
-			{
-				header('Content-Length: ' . $filesize);
-			}
 		}
 	}
 
@@ -227,6 +223,7 @@ class controller
 
 	private function build_select($type)
 	{
+		// List of colors for select
 		$list = [
 			'silver'	=> 'C0C0C0',
 			'darkred'	=> '8B0000',
@@ -258,7 +255,7 @@ class controller
 
 	private function clean_text($text)
 	{
-		return  str_replace(
+		return str_replace(
 			['  ', 'é', 'ê', 'è', 'ë', 'É', 'Ê', 'È', 'Ë', 'à', 'â', 'ä', 'ã', 'À', 'Â', 'Ä', 'Ã', 'î', 'ï', 'Î', 'Ï', 'ó', 'ò', 'ô', 'ö', 'õ', 'Ó', 'Ò', 'Ô', 'Ö', 'Õ', 'ù', 'û', 'ü', 'Ù', 'Û', 'Ü', 'ç', 'Ç', 'ñ', 'Ñ'],
 			[' ', 'e', 'e', 'e', 'e', 'E', 'E', 'E', 'E', 'a', 'a', 'a', 'a', 'A', 'A', 'A', 'A', 'i', 'i', 'I', 'I', 'o', 'o', 'o', 'o', 'o', 'O', 'O', 'O', 'O', 'O', 'u', 'u', 'u', 'U', 'U', 'U', 'c', 'c', 'n', 'n'],
 			str_replace(["'", '"', ',', ';', '%', '€', '£', '?', '=', '&lt;', '&gt;', '&quot;', '&amp;', '<', '>', '&'], '', $text)
@@ -268,6 +265,7 @@ class controller
 	private function clean_nb($nb, $range)
 	{
 		$total = $nb + $range;
+		// Limit nb to 255
 		return ($total > 255) ? 255 : $total;
 	}
 
