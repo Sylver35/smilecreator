@@ -132,7 +132,7 @@ class controller
 		$smiley = $this->sort_smiley($smiley);
 
 		// See if the debug mode is wanted
-		$debug = (strrpos($text, 'debug-mode') !== false) ? true : false;
+		$debug = (bool) (strrpos($text, 'debug-mode') !== false);
 
 		// Clean the text before
 		$text = $this->clean_text($text);
@@ -174,7 +174,7 @@ class controller
 		// Create image and send it to the browser
 		$image = @imagepng($this->create_img($smiley, $width, $height, $fontcolor, $shadowcolor, $shieldshadow, $fontwidth, $fontheight, $output), NULL, -1, PNG_ALL_FILTERS);
 		// Build headers now
-		$this->build_headers($image, $text, $debug);
+		$this->build_headers($text, $debug);
 
 		$this->template->assign_var('SMILEY', $image);
 
@@ -186,7 +186,7 @@ class controller
 		exit_handler();
 	}
 
-	private function build_headers($image, $text, $debug)
+	private function build_headers($text, $debug)
 	{
 		header('Pragma: public');
 		header('Expires: ' . gmdate('D, d M Y H:i:s', time()) . ' GMT');
