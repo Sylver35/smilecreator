@@ -81,10 +81,13 @@ class listener implements EventSubscriberInterface
 	 */
 	public function parse_bbcodes_after($event)
 	{
-		if ($event['text'] && (strpos($event['text'], 'S_CREATOR_BBCODE') !== false))
+		if ($event['text'] !== null)
 		{
-			$app = (!$this->config['enable_mod_rewrite']) ? '/app.' . $this->php_ext : '';
-			$event['text'] = str_replace('%7CS_CREATOR_BBCODE%7Capp.php', generate_board_url() . $app, $event['text']);
+			if (strpos($event['text'], 'S_CREATOR_BBCODE') !== false)
+			{
+				$app = (!$this->config['enable_mod_rewrite']) ? '/app.' . $this->php_ext : '';
+				$event['text'] = str_replace('%7CS_CREATOR_BBCODE%7Capp.php', generate_board_url() . $app, $event['text']);
+			}
 		}
 	}
 
